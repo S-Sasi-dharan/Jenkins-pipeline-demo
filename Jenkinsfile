@@ -1,32 +1,64 @@
 pipeline {
     agent any
 
+    environment {
+        JMETER_HOME = 'C:\Users\ssathiyamoorthy\Downloads\apache-jmeter-5.6.3\apache-jmeter-5.6.3' // <-- change this to your JMeter installation path
+        RESULTS_DIR = 'jmeter-results-github'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/S-Sasi-dharan/Jenkins-pipeline-demo.git'
+                echo "Checking out code from Git..."
+                git 'https://github.com/S-Sasi-dharan/Jenkins-pipeline-demo.git'
             }
         }
 
-        stage('Build') {
+        stage('Run JMeter Tests') {
             steps {
-                echo 'Building the project...'
+                echo "Running JMeter test plan..."
+                
+                // Make sure results directory exists
+                bat "if not exist %RESULTS_DIR% mkdir %RESULTS_DIR%"
+                
+                // Run JMeter in non-GUI mode
+                bat """
+                %JMETER_HOME%\\bin\\jmeter.bat -n -t tests/sample-test.jmx -l %RESULTS_DIR%\\results.jtl -e -o %RESULTS_DIR%\\report
+                """
             }
         }
 
-        stage('Test') {
+        stage('Archive Results') {
             steps {
-                echo 'Running tests...'
+                echo "Archiving JMeter reports..."
+                archiveArtifacts artifacts: "${RESULTS_DIR}/**", allowEmptyArchive: true
+            }
+        }
+
+        stage('Publish HTML Report') {
+            steps {
+                script {
+                    // Check if HTML Publisher plugin is installed
+                    if (fileExists("${RESULTS_DIR}/report/index.html")) {
+                        publishHTML (target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "${RESULTS_DIR}/report",
+                            reportFiles: 'index.html',
+                            reportName: 'JMeter Test Report'
+                        ])
+                    } else {
+                        echo "HTML report not found, skipping HTML publish."
+                    }
+                }
             }
         }
     }
 
     post {
-        success {
-            echo 'Build successful!'
-        }
-        failure {
-            echo 'Build failed!'
+        always {
+            echo "JMeter pipeline finished!"
         }
     }
 }
