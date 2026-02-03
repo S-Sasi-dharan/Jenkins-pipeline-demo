@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        JMETER_HOME = 'C:\Users\ssathiyamoorthy\Downloads\apache-jmeter-5.6.3\apache-jmeter-5.6.3' // <-- change this to your JMeter installation path
+        JMETER_HOME = 'C:\\Users\\ssathiyamoorthy\\Downloads\\apache-jmeter-5.6.3\\apache-jmeter-5.6.3' // <-- change this to your JMeter installation path
         RESULTS_DIR = 'jmeter-results-github'
     }
 
@@ -23,7 +23,7 @@ pipeline {
                 
                 // Run JMeter in non-GUI mode
                 bat """
-                %JMETER_HOME%\\bin\\jmeter.bat -n -t tests/sample-test.jmx -l %RESULTS_DIR%\\results.jtl -e -o %RESULTS_DIR%\\report
+                %JMETER_HOME%\\bin\\jmeter.bat -n -t "C:\Users\ssathiyamoorthy\Downloads\Testing Folder\blazedemo\Enhancing script\enhancingscript.jmx" -l %RESULTS_DIR%\\results.jtl -e -o %RESULTS_DIR%\\report
                 """
             }
         }
