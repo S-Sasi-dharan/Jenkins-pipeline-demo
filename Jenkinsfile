@@ -23,7 +23,7 @@ pipeline {
                 
                 // Run JMeter in non-GUI mode
                 bat """
-                %JMETER_HOME%\\bin\\jmeter.bat -n -t "C:\Users\ssathiyamoorthy\Downloads\Testing Folder\blazedemo\Enhancing script\enhancingscript.jmx" -l %RESULTS_DIR%\\results.jtl -e -o %RESULTS_DIR%\\report
+                %JMETER_HOME%\\bin\\jmeter.bat -n -t "C:\\Users\\ssathiyamoorthy\\Downloads\\Testing Folder\\blazedemo\\Enhancing script\\enhancingscript.jmx" -l %RESULTS_DIR%\\results.jtl -e -o %RESULTS_DIR%\\report
                 """
             }
         }
