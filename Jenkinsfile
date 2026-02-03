@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo "Checking out code from Git..."
-                git 'https://github.com/S-Sasi-dharan/Jenkins-pipeline-demo.git'
+                echo "Checking out code from Git (main branch)..."
+                git branch: 'main', url: 'https://github.com/S-Sasi-dharan/Jenkins-pipeline-demo.git'
             }
         }
 
